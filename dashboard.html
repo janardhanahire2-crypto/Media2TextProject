@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | Media2Text{% endblock %}
+
+{% block content %}
+<section class="dashboard-page">
+    <div class="dashboard-shell">
+        <div class="dashboard-top">
+            <div class="welcome-copy">
+                <span class="eyebrow">DASHBOARD</span>
+                <h1>Hello, {{ user.username }} <span class="wave">👋</span></h1>
+                <p>Manage your transcription workflow and track recent media conversions.</p>
+            </div>
+
+            <div class="header-actions">
+                <a href="{{ url_for('history') }}" class="btn btn-glass">View History</a>
+                <a href="{{ url_for('upload') }}" class="btn btn-primary">+ New Conversion</a>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card glow-purple">
+                <div class="stat-icon">📁</div>
+                <div class="stat-body">
+                    <span class="stat-label">Total Files</span>
+                    <strong>{{ total }}</strong>
+                </div>
+            </div>
+
+            <div class="stat-card glow-cyan">
+                <div class="stat-icon">📄</div>
+                <div class="stat-body">
+                    <span class="stat-label">PDF Exports</span>
+                    <strong>{{ pdf_count }}</strong>
+                </div>
+            </div>
+
+            <div class="stat-card glow-gold">
+                <div class="stat-icon">👤</div>
+                <div class="stat-body">
+                    <span class="stat-label">Access</span>
+                    <strong>{{ user.role|capitalize }}</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="content-card main-panel">
+                <div class="card-heading">
+                    <div>
+                        <span class="eyebrow">RECENT</span>
+                        <h2>Recent Transcriptions</h2>
+                    </div>
+                    <a href="{{ url_for('history') }}">View all →</a>
+                </div>
+
+                {% if records %}
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>File</th>
+                                    <th>Type</th>
+                                    <th>Language</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for record in records %}
+                                <tr>
+                                    <td>{{ record.original_filename }}</td>
+                                    <td>{{ record.media_type|capitalize }}</td>
+                                    <td>{{ record.language }}</td>
+                                    <td>{{ record.created_at.strftime('%d-%m-%Y') }}</td>
+                                    <td>
+                                        <a class="small-btn"
+                                           href="{{ url_for('editor', record_id=record.id) }}">
+                                            Open
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="empty">
+                        <div>🎧</div>
+                        <h3>No conversions yet</h3>
+                        <p>Upload your first audio/video file to get started.</p>
+                        <a href="{{ url_for('upload') }}" class="btn btn-primary">
+                            Start Conversion
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+
+            <aside class="side-panel">
+                <div class="mini-card">
+                    <span class="eyebrow">QUICK ACTIONS</span>
+                    <h3>Workspace</h3>
+                    <ul class="action-list">
+                        <li>
+                            <a href="{{ url_for('upload') }}">
+                                <span>⬆️</span>
+                                Upload media
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('history') }}">
+                                <span>🕘</span>
+                                Recent history
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('profile') }}">
+                                <span>⚙️</span>
+                                Edit profile
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="mini-card insights-card">
+                    <span class="eyebrow">STATUS</span>
+                    <h3>Workflow pulse</h3>
+                    <div class="progress-wrap">
+                        <div class="progress-bar">
+                            <span style="width: 72%"></span>
+                        </div>
+                    </div>
+                    <p class="insight-copy">72% of your conversion queue is ready for export.</p>
+
+                    <div class="mini-metrics">
+                        <div>
+                            <span>Ready</span>
+                            <strong>12</strong>
+                        </div>
+                        <div>
+                            <span>Review</span>
+                            <strong>4</strong>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
+{% endblock %}

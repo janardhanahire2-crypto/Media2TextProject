@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}History | Media2Text{% endblock %}
+
+{% block content %}
+<section class="dashboard-page">
+
+    <div class="dashboard-top">
+        <div>
+            <span class="eyebrow">HISTORY</span>
+            <h1>Your Transcription History</h1>
+            <p>All your previous conversion records.</p>
+        </div>
+
+        <a href="{{ url_for('upload') }}" class="btn btn-primary">
+            + New Conversion
+        </a>
+    </div>
+
+    <div class="content-card">
+        {% if records %}
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>File</th>
+                        <th>Type</th>
+                        <th>Language</th>
+                        <th>Date</th>
+                        <th>PDF</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                {% for record in records %}
+                    <tr>
+                        <td>{{ record.original_filename }}</td>
+                        <td>{{ record.media_type|capitalize }}</td>
+                        <td>{{ record.language }}</td>
+                        <td>{{ record.created_at.strftime('%d-%m-%Y %H:%M') }}</td>
+
+                        <td>
+                            {% if record.pdf_filename %}
+                                <span class="status success-status">Ready</span>
+                            {% else %}
+                                <span class="status">Not Generated</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="actions">
+                            <a class="small-btn"
+                               href="{{ url_for('editor', record_id=record.id) }}">
+                                Edit
+                            </a>
+
+                            {% if record.pdf_filename %}
+                                <a class="small-btn"
+                                   href="{{ url_for('download_pdf', record_id=record.id) }}">
+                                    PDF
+                                </a>
+                            {% endif %}
+
+                            <form method="POST"
+                                  action="{{ url_for('delete_record', record_id=record.id) }}"
+                                  onsubmit="return confirm('Delete this record?');">
+                                <button class="delete-btn" type="submit">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <div class="empty">
+                <div>🗂️</div>
+                <h3>No history available</h3>
+                <p>Your converted files will appear here.</p>
+            </div>
+        {% endif %}
+    </div>
+
+</section>
+{% endblock %}

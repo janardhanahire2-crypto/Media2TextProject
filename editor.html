@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block title %}Text Editor | Media2Text{% endblock %}
+
+{% block content %}
+<section class="editor-page">
+
+    <div class="page-heading">
+        <span class="eyebrow">TEXT EDITOR</span>
+        <h1>Edit & Export</h1>
+        <p>{{ record.original_filename }}</p>
+    </div>
+
+    <div class="editor-card">
+
+        <div class="record-info">
+
+            <div>
+                <span>FILE</span>
+                <strong>{{ record.original_filename }}</strong>
+            </div>
+
+            <div>
+                <span>SPEECH LANGUAGE</span>
+                <strong>{{ record.language }}</strong>
+            </div>
+
+            <div>
+                <span>TYPE</span>
+                <strong>{{ record.media_type|capitalize }}</strong>
+            </div>
+
+        </div>
+
+
+        <!-- EDITABLE TRANSCRIPT -->
+
+        <form method="POST">
+
+            <label for="transcript">
+                Original / Editable Transcript
+            </label>
+
+            <textarea
+                name="transcript"
+                id="transcript"
+                class="editor-textarea"
+                spellcheck="true"
+                placeholder="Your transcript will appear here..."
+            >{{ record.transcript or "" }}</textarea>
+
+
+            <!-- BUTTONS -->
+
+            <div class="editor-actions">
+
+                <button
+                    class="btn btn-primary"
+                    type="submit"
+                    name="action"
+                    value="save"
+                >
+                    Save Text
+                </button>
+
+
+                <a
+                    href="{{ url_for('generate_pdf', record_id=record.id) }}"
+                    class="btn btn-secondary"
+                >
+                    Generate PDF
+                </a>
+
+
+                {% if record.pdf_filename %}
+
+                    <a
+                        href="{{ url_for('download_pdf', record_id=record.id) }}"
+                        class="btn btn-outline"
+                    >
+                        Download PDF
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </form>
+
+
+        <!-- PDF INFORMATION -->
+
+        <div class="pdf-note">
+
+            <strong>PDF support:</strong>
+
+            Your transcript can be edited and exported as a PDF.
+
+            Marathi and Hindi Unicode text are supported when the required
+            Devanagari font is available in the project's
+            <code>fonts</code> folder.
+
+        </div>
+
+    </div>
+
+</section>
+{% endblock %}

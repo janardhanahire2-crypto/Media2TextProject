@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Media2Text{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+<header class="top-header">
+    <div class="header-left">
+        <button class="hamburger" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+        <a href="{{ url_for('index') }}" class="logo">
+            <div class="logo-icon"><i class="fa-solid fa-file-audio"></i></div>
+            <div class="logo-text">
+                <strong>Media2Text</strong>
+                <small>Audio &amp; Video Transcription</small>
+            </div>
+        </a>
+    </div>
+
+    <div class="header-right">
+        {% if logged_user %}
+        <div class="user-menu">
+            <button class="admin-button" id="adminButton" type="button">
+                <div class="admin-logo"><i class="fa-solid fa-user-shield"></i></div>
+                <div class="admin-name">
+                    <strong>{{ logged_user.username }}</strong>
+                    <small>{{ 'Administrator' if logged_user.role == 'admin' else 'User' }}</small>
+                </div>
+                <i class="fa-solid fa-chevron-down arrow"></i>
+            </button>
+
+            <div class="user-dropdown" id="userDropdown">
+                <div class="dropdown-user">
+                    <div class="dropdown-avatar"><i class="fa-solid fa-user"></i></div>
+                    <div>
+                        <strong>{{ logged_user.username }}</strong>
+                        <small>{{ logged_user.email }}</small>
+                    </div>
+                </div>
+                <div class="dropdown-line"></div>
+                <a href="{{ url_for('dashboard') }}"><i class="fa-solid fa-gauge-high"></i>Dashboard</a>
+                <a href="{{ url_for('profile') }}"><i class="fa-solid fa-user"></i>My Profile</a>
+                {% if logged_user.role == 'admin' %}
+                <a href="{{ url_for('admin') }}"><i class="fa-solid fa-user-shield"></i>Admin Panel</a>
+                {% endif %}
+                <div class="dropdown-line"></div>
+                <a href="{{ url_for('logout') }}" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
+            </div>
+        </div>
+        {% else %}
+        <a href="{{ url_for('login') }}" class="login-button">
+            <i class="fa-solid fa-right-to-bracket"></i><span>Login</span>
+        </a>
+        {% endif %}
+    </div>
+</header>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-title">
+            <div class="sidebar-logo"><i class="fa-solid fa-file-audio"></i></div>
+            <div><strong>Media2Text</strong><small>Menu</small></div>
+        </div>
+        <button class="close-sidebar" id="closeSidebar" type="button"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <nav class="sidebar-menu">
+        <a href="{{ url_for('index') }}"><i class="fa-solid fa-house"></i><span>Home</span></a>
+        {% if logged_user %}
+        <a href="{{ url_for('dashboard') }}"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+        <a href="{{ url_for('upload') }}"><i class="fa-solid fa-cloud-arrow-up"></i><span>Convert Media</span></a>
+        <a href="{{ url_for('history') }}"><i class="fa-solid fa-clock-rotate-left"></i><span>History</span></a>
+        <a href="{{ url_for('profile') }}"><i class="fa-solid fa-user"></i><span>Profile</span></a>
+        {% if logged_user.role == 'admin' %}
+        <div class="sidebar-section">ADMIN</div>
+        <a href="{{ url_for('admin') }}"><i class="fa-solid fa-user-shield"></i><span>Admin Panel</span></a>
+        {% endif %}
+        <div class="sidebar-section">ACCOUNT</div>
+        <a href="{{ url_for('logout') }}" class="sidebar-logout"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
+        {% else %}
+        <div class="sidebar-section">ACCOUNT</div>
+        <a href="{{ url_for('login') }}"><i class="fa-solid fa-right-to-bracket"></i><span>Login</span></a>
+        <a href="{{ url_for('register') }}"><i class="fa-solid fa-user-plus"></i><span>Register</span></a>
+        {% endif %}
+    </nav>
+
+    <div class="sidebar-footer">
+        <i class="fa-solid fa-microphone-lines"></i>
+        <div><strong>Media2Text</strong><small>TY B.Sc. CS Project</small></div>
+    </div>
+</aside>
+
+<main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-container">
+            {% for category, message in messages %}
+            <div class="flash {{ category }}">
+                <span>{{ message }}</span>
+                <button type="button" onclick="this.parentElement.remove()">×</button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+    <div><strong>Media2Text</strong><p>Audio &amp; Video to Text Converter with Translation and PDF Generator</p></div>
+    <div><p>TY B.Sc. Computer Science Project</p></div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% if logged_user %}
+<script>
+(function () {
+    async function sendHeartbeat() {
+        try {
+            await fetch("{{ url_for('heartbeat') }}", {
+                method: "POST",
+                headers: {"X-Requested-With": "XMLHttpRequest"},
+                credentials: "same-origin"
+            });
+        } catch (e) {
+            // Activity tracking should never disturb the application UI.
+        }
+    }
+    setInterval(sendHeartbeat, 60000);
+})();
+</script>
+{% endif %}
+</body>
+</html>

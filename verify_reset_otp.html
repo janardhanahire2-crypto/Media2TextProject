@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Verify Reset OTP | Media2Text{% endblock %}
+{% block content %}
+<div class="auth-page">
+    <div class="auth-card">
+        <div class="auth-logo"><i class="fa-solid fa-shield-halved"></i></div>
+        <h1>Verify Reset OTP</h1>
+        <p class="muted">Enter the 6-digit OTP sent to <strong>{{ email }}</strong>.</p>
+        <p class="muted">The OTP expires in 5 minutes. Maximum 5 attempts.</p>
+
+        <form method="POST" class="form">
+            <label for="otp">Password Reset OTP</label>
+            <input type="text" id="otp" name="otp" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" minlength="6" placeholder="Enter 6-digit OTP" autocomplete="one-time-code" required>
+            <button class="btn btn-primary full" type="submit">
+                <i class="fa-solid fa-circle-check"></i>&nbsp; Verify OTP
+            </button>
+        </form>
+
+        <form method="POST" action="{{ url_for('resend_reset_otp') }}" class="form" style="margin-top:10px;">
+            <button class="btn full" type="submit">
+                <i class="fa-solid fa-rotate"></i>&nbsp; Resend OTP
+            </button>
+        </form>
+
+        <p class="auth-bottom"><a href="{{ url_for('forgot_password') }}">Use another email</a></p>
+    </div>
+</div>
+{% endblock %}

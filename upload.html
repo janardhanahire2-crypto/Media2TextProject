@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}Convert Media | Media2Text{% endblock %}
+
+{% block content %}
+<section class="upload-page">
+
+    <div class="page-heading">
+        <span class="eyebrow">CONVERTER</span>
+        <h1>Audio / Video to Text</h1>
+        <p>
+            Upload audio or video, choose the speech language,
+            convert it to editable text, and translate it into another language.
+        </p>
+    </div>
+
+    <div class="upload-layout">
+
+        <div class="upload-card">
+            <form method="POST"
+                  enctype="multipart/form-data"
+                  class="form"
+                  id="uploadForm">
+
+                <div class="drop-zone" id="dropZone">
+                    <input type="file"
+                           id="media"
+                           name="media"
+                           accept="audio/*,video/*,.mkv,.avi,.mov,.flv,.wmv,.webm,.ts,.mts,.m2ts,.3gp,.3g2,.vob,.rmvb,.mp3,.wav,.m4a,.aac,.ogg,.opus,.flac,.wma,.aiff,.amr"
+                           required>
+
+                    <div class="upload-icon">☁️</div>
+                    <h2>Choose your media file</h2>
+                    <p>
+                        Common audio/video formats are supported through FFmpeg.
+                    </p>
+                    <span class="file-name" id="fileName">
+                        No file selected
+                    </span>
+                </div>
+
+                <label for="speechLanguage">Speech / Source Language</label>
+
+                <select name="language"
+                        id="speechLanguage"
+                        required>
+                    {% for code, name in speech_languages.items() %}
+                        <option value="{{ code }}"
+                            {% if code == default_speech_language %}selected{% endif %}>
+                            {{ name }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <div class="default-language-note">
+                    <strong>Default language:</strong>
+                    Marathi (mr-IN).
+                    You can change it before every conversion.
+                </div>
+
+                <div class="info-box">
+                    <strong>Supported media:</strong>
+                    MP3, WAV, M4A, AAC, OGG, OPUS, FLAC, WMA,
+                    MP4, MKV, AVI, MOV, WEBM, MPEG, 3GP, TS and many
+                    other FFmpeg-readable formats.
+                    <br><br>
+                    Clear speech and less background noise improve recognition.
+                </div>
+
+                <button type="submit"
+                        class="btn btn-primary full"
+                        id="convertButton">
+                    Convert to Text
+                </button>
+            </form>
+        </div>
+
+        <div class="side-info">
+            <h2>Conversion Process</h2>
+
+            <div class="process-item">
+                <span>1</span>
+                <div>
+                    <strong>Upload Media</strong>
+                    <p>Select an audio or video file.</p>
+                </div>
+            </div>
+
+            <div class="process-item">
+                <span>2</span>
+                <div>
+                    <strong>Audio Processing</strong>
+                    <p>FFmpeg extracts and converts the audio.</p>
+                </div>
+            </div>
+
+            <div class="process-item">
+                <span>3</span>
+                <div>
+                    <strong>Speech Recognition</strong>
+                    <p>Speech is converted into editable text.</p>
+                </div>
+            </div>
+
+            <div class="process-item">
+                <span>4</span>
+                <div>
+                    <strong>Translate & PDF</strong>
+                    <p>Translate into another language and generate PDF.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

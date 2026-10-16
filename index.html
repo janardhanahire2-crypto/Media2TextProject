@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %}Media2Text | Home{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+        <div class="badge">SMART SPEECH-TO-TEXT SYSTEM</div>
+
+        <h1>
+            Convert Your
+            <span>Audio & Video</span>
+            Into Text
+        </h1>
+
+        <p>
+            Upload an audio or video file, convert speech into editable text,
+            and generate a clean PDF from the final transcript.
+        </p>
+
+        <div class="hero-buttons">
+            {% if logged_user %}
+                <a href="{{ url_for('upload') }}" class="btn btn-primary">
+                    Start Conversion →
+                </a>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-glass">
+                    Dashboard
+                </a>
+            {% else %}
+                <a href="{{ url_for('register') }}" class="btn btn-primary">
+                    Get Started →
+                </a>
+                <a href="{{ url_for('login') }}" class="btn btn-glass">
+                    Login
+                </a>
+            {% endif %}
+        </div>
+
+        <div class="hero-mini">
+            <div>🎙️ Speech Recognition</div>
+            <div>🎬 Audio / Video</div>
+            <div>📄 PDF Export</div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-heading">
+        <span>FEATURES</span>
+        <h2>Everything you need in one place</h2>
+        <p>Designed according to the project requirements.</p>
+    </div>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="feature-icon">🎧</div>
+            <h3>Audio & Video Upload</h3>
+            <p>Upload supported audio and video files from your computer.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🗣️</div>
+            <h3>Speech to Text</h3>
+            <p>Speech is processed and converted into editable text.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">✏️</div>
+            <h3>Text Editor</h3>
+            <p>Edit the generated transcript before creating the PDF.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">📄</div>
+            <h3>PDF Generator</h3>
+            <p>Create and download a PDF of your final transcript.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🗂️</div>
+            <h3>History</h3>
+            <p>Keep previous conversion records in your account.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🔐</div>
+            <h3>Secure Login</h3>
+            <p>User accounts keep individual transcription records separate.</p>
+        </div>
+    </div>
+</section>
+
+<section class="workflow">
+    <div class="section-heading">
+        <span>WORKFLOW</span>
+        <h2>How the system works</h2>
+    </div>
+
+    <div class="steps">
+        <div class="step">
+            <b>01</b>
+            <h3>Upload</h3>
+            <p>Select audio or video.</p>
+        </div>
+        <div class="line"></div>
+        <div class="step">
+            <b>02</b>
+            <h3>Process</h3>
+            <p>FFmpeg extracts audio.</p>
+        </div>
+        <div class="line"></div>
+        <div class="step">
+            <b>03</b>
+            <h3>Convert</h3>
+            <p>Speech becomes text.</p>
+        </div>
+        <div class="line"></div>
+        <div class="step">
+            <b>04</b>
+            <h3>Export</h3>
+            <p>Edit and create PDF.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
